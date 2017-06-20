@@ -1,0 +1,13 @@
+{
+    "name": "eelly/easemob",
+    "description": "easemob client",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "hehui",
+            "email": "runphp@qq.com"
+        }
+    ],
+    "require": {}
+}
