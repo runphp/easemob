@@ -76,6 +76,7 @@ abstract class AbstractService
 
         try {
             return $this->parseJson($content);
+            // @codeCoverageIgnoreStart
         } catch (UnexpectedValueException $e) {
             if ($response->getStatusCode() == 500) {
                 throw new UnexpectedValueException(
@@ -86,6 +87,7 @@ abstract class AbstractService
             }
 
             return $content;
+            // @codeCoverageIgnoreEnd
         }
     }
 
@@ -93,10 +95,12 @@ abstract class AbstractService
     {
         $content = json_decode($content, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
+            // @codeCoverageIgnoreStart
             throw new UnexpectedValueException(sprintf(
                 'Failed to parse JSON response: %s',
                 json_last_error_msg()
                 ));
+            // @codeCoverageIgnoreEnd
         }
 
         return $content;
