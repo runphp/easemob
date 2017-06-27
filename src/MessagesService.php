@@ -10,9 +10,6 @@
 
 namespace Eelly\Easemob;
 
-use Eelly\Easemob\Exception\MessagesException;
-use Psr\Http\Message\ResponseInterface;
-
 /**
  * 发送消息.
  *
@@ -111,14 +108,5 @@ class MessagesService extends AbstractService
         }
 
         return $this->getResult(self::METHOD_POST, '/messages', $body);
-    }
-
-    protected function checkResponse(ResponseInterface $response, $data): void
-    {
-        if (!empty($data['error'])) {
-            $error = $data['error'];
-            dump($data);
-            throw new MessagesException($error, $response->getStatusCode(), $data);
-        }
     }
 }

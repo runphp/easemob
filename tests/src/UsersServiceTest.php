@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Eelly\Easemob;
 
-use Eelly\Easemob\Exception\UsersException;
+use Eelly\Easemob\Exception\ClientException;
 use Eelly\OAuth2\Client\Provider\EasemobProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use PHPUnit\Framework\TestCase;
@@ -47,7 +47,7 @@ class UsersServiceTest extends TestCase
         $return = $this->usersService->createUser($username, '123456');
         $this->assertInternalType('array', $return);
         $this->usersService->deleteUser($username);
-        $this->expectException(UsersException::class);
+        $this->expectException(ClientException::class);
         $this->usersService->createUser('time_123', '123456');
         $this->usersService->createUser('time_123', '123456');
         $this->usersService->deleteUser('time_123');

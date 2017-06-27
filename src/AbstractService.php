@@ -12,8 +12,11 @@ declare(strict_types=1);
 
 namespace Eelly\Easemob;
 
+use Eelly\Easemob\Exception\ClientException as EasemobClientException;
+use Eelly\Easemob\Exception\ServerException as EasemobServerException;
 use Eelly\OAuth2\Client\Provider\EasemobProvider;
-use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\MultipartStream;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -59,16 +62,23 @@ abstract class AbstractService
 
     protected function getParsedResponse(RequestInterface $request)
     {
+        $exceptionClass = null;
         try {
             $response = $this->provider->getResponse($request);
-        } catch (BadResponseException $e) {
+        } catch (ServerException $e) {
             $response = $e->getResponse();
+            $exceptionClass = EasemobServerException::class;
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
+            $exceptionClass = EasemobClientException::class;
+        }
+        $data = $this->parseResponse($response);
+
+        if (null !== $exceptionClass && !empty($data['error'])) {
+            throw new $exceptionClass($data['error'], $response->getStatusCode(), $data);
         }
 
-        $parsed = $this->parseResponse($response);
-        $this->checkResponse($response, $parsed);
-
-        return $parsed;
+        return $data;
     }
 
     /**
@@ -135,6 +145,4 @@ abstract class AbstractService
 
         return $content;
     }
-
-    abstract protected function checkResponse(ResponseInterface $response, $data): void;
 }
