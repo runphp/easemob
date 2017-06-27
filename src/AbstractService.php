@@ -14,6 +14,7 @@ namespace Eelly\Easemob;
 
 use Eelly\OAuth2\Client\Provider\EasemobProvider;
 use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Psr7\MultipartStream;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use UnexpectedValueException;
@@ -74,16 +75,25 @@ abstract class AbstractService
      * @param string $method
      * @param string $uri
      * @param array  $body
+     * @param array  $headers
+     * @param array  $multipart
      *
      * @return array
      */
-    protected function getResult(string $method, string $uri, array $body = [])
+    protected function getResult(string $method, string $uri, array $body = [], array $headers = [], array $multipart = [])
     {
         $options = [];
         if (!empty($body)) {
             $options['body'] = json_encode($body);
         }
+        if (!empty($headers)) {
+            $options['headers'] = $headers;
+        }
+        if (!empty($multipart)) {
+            $options['body'] = new MultipartStream($multipart);
+        }
         $uri = $this->provider->getBaseAuthorizationUrl().$uri;
+        $options['debug'] = true;
         $request = $this->provider->getAuthenticatedRequest($method, $uri, $this->token, $options);
         $parsed = $this->getParsedResponse($request);
 
