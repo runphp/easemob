@@ -56,7 +56,7 @@ abstract class AbstractService
         $this->token = $this->provider->getAccessToken('client_credentials')->getToken();
     }
 
-    public function getParsedResponse(RequestInterface $request)
+    protected function getParsedResponse(RequestInterface $request)
     {
         try {
             $response = $this->provider->getResponse($request);
@@ -66,6 +66,26 @@ abstract class AbstractService
 
         $parsed = $this->parseResponse($response);
         $this->checkResponse($response, $parsed);
+
+        return $parsed;
+    }
+
+    /**
+     * @param string $method
+     * @param string $uri
+     * @param array  $body
+     *
+     * @return array
+     */
+    protected function getResult(string $method, string $uri, array $body = [])
+    {
+        $options = [];
+        if (!empty($body)) {
+            $options['body'] = json_encode($body);
+        }
+        $uri = $this->provider->getBaseAuthorizationUrl().$uri;
+        $request = $this->provider->getAuthenticatedRequest($method, $uri, $this->token, $options);
+        $parsed = $this->getParsedResponse($request);
 
         return $parsed;
     }
