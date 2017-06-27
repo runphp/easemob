@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 /*
  * This file is part of eelly package.
  *
@@ -12,6 +10,9 @@ declare(strict_types=1);
 
 namespace Eelly\Easemob\Exception;
 
-class UsersException extends EasemobException
+/**
+ * Exception when a server error is encountered (5xx codes).
+ */
+class ServerException extends EasemobException
 {
 }

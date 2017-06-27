@@ -12,8 +12,12 @@ declare(strict_types=1);
 
 namespace Eelly\Easemob;
 
+use Eelly\Easemob\Exception\ClientException as EasemobClientException;
+use Eelly\Easemob\Exception\ServerException as EasemobServerException;
 use Eelly\OAuth2\Client\Provider\EasemobProvider;
-use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Psr7\MultipartStream;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use UnexpectedValueException;
@@ -56,16 +60,52 @@ abstract class AbstractService
         $this->token = $this->provider->getAccessToken('client_credentials')->getToken();
     }
 
-    public function getParsedResponse(RequestInterface $request)
+    protected function getParsedResponse(RequestInterface $request)
     {
+        $exceptionClass = null;
         try {
             $response = $this->provider->getResponse($request);
-        } catch (BadResponseException $e) {
+        } catch (ServerException $e) {
             $response = $e->getResponse();
+            $exceptionClass = EasemobServerException::class;
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
+            $exceptionClass = EasemobClientException::class;
+        }
+        $data = $this->parseResponse($response);
+
+        if (null !== $exceptionClass && !empty($data['error'])) {
+            throw new $exceptionClass($data['error'], $response->getStatusCode(), $data);
         }
 
-        $parsed = $this->parseResponse($response);
-        $this->checkResponse($response, $parsed);
+        return $data;
+    }
+
+    /**
+     * @param string $method
+     * @param string $uri
+     * @param array  $body
+     * @param array  $headers
+     * @param array  $multipart
+     *
+     * @return array
+     */
+    protected function getResult(string $method, string $uri, array $body = [], array $headers = [], array $multipart = [])
+    {
+        $options = [];
+        if (!empty($body)) {
+            $options['body'] = json_encode($body);
+        }
+        if (!empty($headers)) {
+            $options['headers'] = $headers;
+        }
+        if (!empty($multipart)) {
+            $options['body'] = new MultipartStream($multipart);
+        }
+        $uri = $this->provider->getBaseAuthorizationUrl().$uri;
+        $options['debug'] = true;
+        $request = $this->provider->getAuthenticatedRequest($method, $uri, $this->token, $options);
+        $parsed = $this->getParsedResponse($request);
 
         return $parsed;
     }
@@ -105,6 +145,4 @@ abstract class AbstractService
 
         return $content;
     }
-
-    abstract protected function checkResponse(ResponseInterface $response, $data): void;
 }
