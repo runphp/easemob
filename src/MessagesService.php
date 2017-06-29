@@ -52,7 +52,7 @@ class MessagesService extends AbstractService
     {
         $msg = [
             'type' => 'txt',
-            'msg' => $text,
+            'msg'  => $text,
         ];
 
         return $this->send($from, $to, $msg, $ext, $targetType);
@@ -75,19 +75,19 @@ class MessagesService extends AbstractService
         ];
         $multipart = [
             [
-                'name' => 'file',
+                'name'     => 'file',
                 'contents' => file_get_contents($filePath),
             ],
         ];
         list($width, $height) = getimagesize($filePath);
         $file = $this->getResult(self::METHOD_POST, '/chatfiles', [], $headers, $multipart);
         $msg = [
-            'type' => 'img',
-            'uri' => $file['uri'].'/'.$file['entities'][0]['uuid'],
+            'type'     => 'img',
+            'uri'      => $file['uri'].'/'.$file['entities'][0]['uuid'],
             'filename' => $fileName,
-            'secret' => $file['entities'][0]['share-secret'],
-            'size' => [
-                'width' => $width,
+            'secret'   => $file['entities'][0]['share-secret'],
+            'size'     => [
+                'width'  => $width,
                 'height' => $height,
             ],
         ];
@@ -99,9 +99,9 @@ class MessagesService extends AbstractService
     {
         $body = [
             'target_type' => $targetType,
-            'target' => (array) $to,
-            'msg' => $msg,
-            'from' => $from,
+            'target'      => (array) $to,
+            'msg'         => $msg,
+            'from'        => $from,
         ];
         if (!empty($ext)) {
             $body['ext'] = $ext;
