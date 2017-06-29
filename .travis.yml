@@ -5,4 +5,9 @@ php:
 install:
   - composer install --no-interaction --prefer-source
 
-script: phpunit
+script:
+ - mkdir -p build/logs
+ - phpunit --coverage-clover build/logs/clover.xml
+
+after_script:
+ - php vendor/bin/coveralls -v
