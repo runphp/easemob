@@ -27,6 +27,7 @@ $rules = [
     'phpdoc_add_missing_param_annotation' => true,
     'phpdoc_var_without_name' => false,
     'no_multiline_whitespace_before_semicolons' => true,
+    'trim_array_spaces' => false,
 ];
 
 return PhpCsFixer\Config::create()

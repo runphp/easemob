@@ -17,6 +17,9 @@
 		"php": "^7.1.3",
 		"eelly/oauth2-client": "dev-master"
 	},
+	"require-dev": {
+		"satooshi/php-coveralls": "dev-master"
+	},
 	"autoload": {
 		"psr-4": {
 			"Eelly\\Easemob\\": "src"
