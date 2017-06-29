@@ -2,9 +2,6 @@ language: php
 php:
   - '7.1'
 
-before_install:
-  - pecl install -f phalcon
-
 install:
   - composer install --no-interaction --prefer-source
 
