@@ -12,9 +12,6 @@ declare(strict_types=1);
 
 namespace Eelly\Easemob;
 
-use Eelly\Easemob\Exception\UsersException;
-use Psr\Http\Message\ResponseInterface;
-
 /**
  * @see http://docs.easemob.com/start/100serverintegration/20users#im_用户管理
  *
@@ -253,14 +250,6 @@ class UsersService extends AbstractService
     public function status(string $username)
     {
         return $this->getResult(self::METHOD_GET, '/users/'.$username.'/status');
-    }
-
-    protected function checkResponse(ResponseInterface $response, $data): void
-    {
-        if (!empty($data['error'])) {
-            $error = $data['error'];
-            throw new UsersException($error, $response->getStatusCode(), $data);
-        }
     }
 
     /**
