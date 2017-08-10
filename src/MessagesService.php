@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /*
  * This file is part of eelly package.
  *
@@ -22,21 +25,21 @@ class MessagesService extends AbstractService
      *
      * @var string
      */
-    const TARGET_USERS = 'users';
+    public const TARGET_USERS = 'users';
 
     /**
      * 给群发消息.
      *
      * @var string
      */
-    const TARGET_CHATGROUPS = 'chatgroups';
+    public const TARGET_CHATGROUPS = 'chatgroups';
 
     /**
      * 给聊天室发消息.
      *
      * @var string
      */
-    const TARGET_CHATROOMS = 'chatrooms';
+    public const TARGET_CHATROOMS = 'chatrooms';
 
     /**
      * 发送文本消息.

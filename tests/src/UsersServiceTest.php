@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /*
  * This file is part of eelly package.
  *
@@ -53,7 +54,7 @@ class UsersServiceTest extends TestCase
         $this->usersService->deleteUser('time_123');
     }
 
-    public function testCreateUsers()
+    public function testCreateUsers(): void
     {
         $users = [];
         for ($i = 0; $i < 10; ++$i) {
@@ -67,7 +68,7 @@ class UsersServiceTest extends TestCase
         }
     }
 
-    public function testGetUser()
+    public function testGetUser(): void
     {
         $username = 'time_'.microtime(true);
         $this->usersService->createUser($username, '123456');
@@ -76,7 +77,7 @@ class UsersServiceTest extends TestCase
         $this->usersService->deleteUser($username);
     }
 
-    public function testDeleteUser()
+    public function testDeleteUser(): void
     {
         $username = 'time_'.microtime(true);
         $this->usersService->createUser($username, '123456');
@@ -84,13 +85,13 @@ class UsersServiceTest extends TestCase
         $this->assertInternalType('array', $return);
     }
 
-    public function testDeleteUsers()
+    public function testDeleteUsers(): void
     {
         $return = $this->usersService->deleteUsers(2);
         $return = $this->assertInternalType('array', $return);
     }
 
-    public function testUpdatePassword()
+    public function testUpdatePassword(): void
     {
         $username = 'time_'.microtime(true);
         $this->usersService->createUser($username, '123456');
@@ -99,7 +100,7 @@ class UsersServiceTest extends TestCase
         $this->usersService->deleteUser($username);
     }
 
-    public function testAddFriend()
+    public function testAddFriend(): void
     {
         $username = 'time_'.microtime(true);
         $this->usersService->createUser($username, '123456');
@@ -111,7 +112,7 @@ class UsersServiceTest extends TestCase
         $this->usersService->deleteUser($username1);
     }
 
-    public function testDeleteFriend()
+    public function testDeleteFriend(): void
     {
         $username = 'time_'.microtime(true);
         $this->usersService->createUser($username, '123456');
@@ -124,7 +125,7 @@ class UsersServiceTest extends TestCase
         $this->usersService->deleteUser($username1);
     }
 
-    public function testGetFriends()
+    public function testGetFriends(): void
     {
         $username = 'time_'.microtime(true);
         $this->usersService->createUser($username, '123456');
@@ -137,7 +138,7 @@ class UsersServiceTest extends TestCase
         $this->usersService->deleteUser($username1);
     }
 
-    public function testAddBlockUsers()
+    public function testAddBlockUsers(): void
     {
         $username = 'time_'.microtime(true);
         $this->usersService->createUser($username, '123456');
@@ -149,7 +150,7 @@ class UsersServiceTest extends TestCase
         $this->usersService->deleteUser($username1);
     }
 
-    public function testDeleteBlockedUser()
+    public function testDeleteBlockedUser(): void
     {
         $username = 'time_'.microtime(true);
         $this->usersService->createUser($username, '123456');
@@ -162,7 +163,7 @@ class UsersServiceTest extends TestCase
         $this->usersService->deleteUser($username1);
     }
 
-    public function testGetBlockedUsers()
+    public function testGetBlockedUsers(): void
     {
         $username = 'time_'.microtime(true);
         $this->usersService->createUser($username, '123456');
@@ -175,14 +176,14 @@ class UsersServiceTest extends TestCase
         $this->usersService->deleteUser($username1);
     }
 
-    public function testGetUserToken()
+    public function testGetUserToken(): void
     {
         $this->usersService->updatePassword('time_123', '123456');
         $return = $this->usersService->getUserToken('time_123', '123456');
         $this->assertInstanceOf(AccessToken::class, $return);
     }
 
-    public function testUpdateNickname()
+    public function testUpdateNickname(): void
     {
         $username = 'time_'.microtime(true);
         $this->usersService->createUser($username, '123456');
@@ -191,7 +192,7 @@ class UsersServiceTest extends TestCase
         $this->usersService->deleteUser($username);
     }
 
-    public function testStatus()
+    public function testStatus(): void
     {
         $username = 'time_'.microtime(true);
         $this->usersService->createUser($username, '123456');

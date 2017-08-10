@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /*
  * This file is part of eelly package.
  *
@@ -46,7 +49,7 @@ class MessagesServiceTest extends TestCase
         $this->testFile = dirname(__DIR__).'/resources/test.jpg';
     }
 
-    public function testSendText()
+    public function testSendText(): void
     {
         $from = 'time_'.microtime(true);
         $to = 'time_1_'.microtime(true);
@@ -61,7 +64,7 @@ class MessagesServiceTest extends TestCase
         $this->usersService->deleteUser($to);
     }
 
-    public function testSendPicture()
+    public function testSendPicture(): void
     {
         $from = 'time_'.microtime(true);
         $to = 'time_1_'.microtime(true);
